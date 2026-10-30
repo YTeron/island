@@ -13,6 +13,7 @@ public class Location {
     private final boolean isLiquid;
     private boolean isGrass;
     private int time;
+    private static final int GRASS_REGROW_TICKS = 10;
 
     private List<Animal> animals;
 
@@ -31,13 +32,19 @@ public class Location {
         return animals;
     }
     public void tick(){
+        if (isLiquid) return;
+        if (isGrass) return;
+
         time++;
-        if (time > 10 && isLiquid == false) {
-            isGrass=true;
-            time =0;
+        if (time >= GRASS_REGROW_TICKS) {
+            isGrass = true;
+            time = 0;
         }
     }
-
+    public void eatGrass() {
+        isGrass = false;
+        time = 0;
+    }
     public boolean isLiquid() {
         return isLiquid;
     }
@@ -63,7 +70,13 @@ public class Location {
         }
         return list;
     }
-
+    public boolean canAdd(Animal animal) {
+        long sameKind = animals.stream()
+                .filter(a -> a.getClass() == animal.getClass())
+                .count();
+        return sameKind < animal.getStats().maxPerCell
+                && animals.size() < 1000; // общий предохранитель
+    }
     public int getX() {
         return x;
     }

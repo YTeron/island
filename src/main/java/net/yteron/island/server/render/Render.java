@@ -1,5 +1,6 @@
 package net.yteron.island.server.render;
 
+import net.yteron.island.animal.herbivore.Rabbit;
 import net.yteron.island.server.Island;
 import net.yteron.island.server.Location;
 
